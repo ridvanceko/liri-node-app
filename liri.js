@@ -1,4 +1,6 @@
 require("dotenv").config();
+const axios = require("axios");
+const moment = require("moment");
 
 let keys = require("./key");
 let spotify = new Spotify(keys.Spotify);
@@ -19,7 +21,36 @@ function Command(command, option) {
   this.run = function() {
       if(this.newCommand === "concert-this"){
         console.log("This is concert-this command")
-      }
+
+        let URL = "https://rest.bandsintown.com/artists/" + this.newOption + "/events?app_id=codingbootcamp"
+        
+ 
+// Make a request for a user with a given ID
+axios.get(URL)
+  .then(function (response) {
+    // handle success
+   
+response.data.forEach((info)=>{
+  console.log("Name: "+info.venue.name);
+  console.log("Country: "+info.venue.country);
+  console.log("City: "+info.venue.city+" "+info.venue.region);
+  console.log("Date: "+info.datetime);
+  console.log(" ")
+})
+
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  }
+        
+
+
+  )}
+
+
+
+   
       else if(this.newCommand === "spotify-this-song"){
         console.log("This spotify-this-song command")
       }
@@ -34,3 +65,5 @@ function Command(command, option) {
 
 
 }
+
+
