@@ -31,12 +31,9 @@ function Command(command, option) {
             console.log("This is concert-this command")
 
             let URL = "https://rest.bandsintown.com/artists/" + this.newOption + "/events?app_id=codingbootcamp"
-
-            console.log(URL)
             // Make a request for a user with a given ID
             axios.get(URL)
                 .then(function (response) {
-
                     response.data.forEach((info) => {
                         console.log("Name: " + info.venue.name);
                         console.log("Country: " + info.venue.country);
@@ -66,22 +63,21 @@ function Command(command, option) {
         else if (this.newCommand === "spotify-this-song") {
             console.log("This spotify-this-song command \n");
 
-            
 
-            spotify.search({ type: 'track', query: this.newOption }, function (err,responsea) {
-                
+            spotify.search({ type: 'track', query: this.newOption }, function (err, responsea) {
+
                 if (err) {
-                    return console.log('Error occurred: ' + err );
+                    return console.log('Error occurred: ' + err);
                 }
-                
-                this.string = "Album: "+response.tracks.items[1].album.name+"\n" + 
-                "Artist(s): "+response.tracks.items[1].album.artists[0].name+"\n"+
-                "Release Date: "+response.tracks.items[1].album.release_date+"\n"+
-                "External URL: "+response.tracks.items[1].external_urls.spotify+"\n";
+
+                this.string = "Album: " + response.tracks.items[1].album.name + "\n" +
+                    "Artist(s): " + response.tracks.items[1].album.artists[0].name + "\n" +
+                    "Release Date: " + response.tracks.items[1].album.release_date + "\n" +
+                    "External URL: " + response.tracks.items[1].external_urls.spotify + "\n";
                 console.log(this.string);
 
 
-                 });
+            });
 
         }
         else if (this.newCommand === "movie-this") {
@@ -110,14 +106,22 @@ function Command(command, option) {
                 });
 
         } else if (this.newCommand === "do-what-it-says") {
-            console.log("This is do what it says command");
-            fs.readFile("random.txt", "utf8", function(err, data){
-                if(err) {
+            console.log("This is do what it says command \n");
+            fs.readFile("random.txt", "utf8", function (err, data) {
+                if (err) {
                     return console.log(err);
                 }
-                console.log(data);
-            });
 
+                data.split("\n").forEach(function (command) {
+                
+                    let command_text = command.split(',');
+                    this._command = new Command(command_text[0], command_text[1].replace(/"/g, ""));
+                    this._command.run();
+                });
+
+
+
+            });
 
         }
     };
